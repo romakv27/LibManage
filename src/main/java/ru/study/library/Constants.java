@@ -8,4 +8,7 @@ public class Constants {
     public static final String CONFIG_PATH = System.getProperty("config");
     public static final Properties configuration = new Properties();
 
+
+    public static final String XML_USER = "xmlUser";
+
 }

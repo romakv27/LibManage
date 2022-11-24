@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import static ru.study.library.Constants.*;
 
-
 /**
  * Configuration utility. Allows to get configuration properties from the
  * default configuration file

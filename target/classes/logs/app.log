@@ -1,12 +1,9 @@
-23.11.2022 20:58:09.800 [main] INFO   r.s.l.LibraryClient - Just a log message.
-23.11.2022 20:58:09.803 [main] DEBUG  r.s.l.LibraryClient - Message for debug level.
-23.11.2022 20:58:09.804 [main] ERROR  r.s.l.LibraryClient - Failed level.
-23.11.2022 20:58:09.805 [main] INFO   r.s.l.LibraryClient - Launching the application...
-23.11.2022 20:58:09.806 [main] INFO   r.s.l.LibraryClient - Operating System: Windows 10 10.0
-23.11.2022 20:58:09.806 [main] INFO   r.s.l.LibraryClient - JRE: 16.0.1
-23.11.2022 20:58:09.806 [main] INFO   r.s.l.LibraryClient - Java Launched From: C:\Program Files\Java\jdk-16.0.1
-23.11.2022 20:58:09.806 [main] INFO   r.s.l.LibraryClient - Class Path: C:\Users\roma\IdeaProjects\libManage\target\classes;C:\Users\roma\.m2\repository\org\slf4j\slf4j-api\2.0.4\slf4j-api-2.0.4.jar;C:\Users\roma\.m2\repository\ch\qos\logback\logback-classic\1.4.5\logback-classic-1.4.5.jar;C:\Users\roma\.m2\repository\ch\qos\logback\logback-core\1.4.5\logback-core-1.4.5.jar
-23.11.2022 20:58:09.807 [main] INFO   r.s.l.LibraryClient - Library Path: C:\Program Files\Java\jdk-16.0.1\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\python310\Scripts\;C:\python310\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\Users\roma\AppData\Local\Microsoft\WindowsApps;%IntelliJ IDEA Community Edition%;C:\Program Files\JetBrains\PyCharm Community Edition 2021.3.2\bin;;C:\Program Files\JetBrains\IntelliJ IDEA 2022.2.3\bin;;D:\Repos\maven\bin;;.
-23.11.2022 20:58:09.807 [main] INFO   r.s.l.LibraryClient - User Home Directory: C:\Users\roma
-23.11.2022 20:58:09.808 [main] INFO   r.s.l.LibraryClient - User Working Directory: C:\Users\roma\IdeaProjects\libManage
-23.11.2022 20:58:09.808 [main] INFO   r.s.l.LibraryClient - Test INFO logging.
+24.11.2022 12:54:46.872 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 12:54:46.892 [main] ERROR  r.s.l.a.DataProviderXML - java.io.FileNotFoundException: src\main\resources\xml\User.xml (Системе не удается найти указанный путь)
+24.11.2022 12:54:46.900 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=1, name='Ivan', age=16}]
+24.11.2022 12:54:46.901 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 12:54:46.901 [main] ERROR  r.s.l.a.DataProviderXML - java.io.FileNotFoundException: src\main\resources\xml\User.xml (Системе не удается найти указанный путь)
+24.11.2022 12:55:34.178 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 12:55:34.183 [main] ERROR  r.s.l.a.DataProviderXML - java.io.FileNotFoundException: src\main\resources\xml\User.xml (Не удается найти указанный файл)
+24.11.2022 12:55:34.191 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=1, name='Ivan', age=16}]
+24.11.2022 12:55:34.191 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
