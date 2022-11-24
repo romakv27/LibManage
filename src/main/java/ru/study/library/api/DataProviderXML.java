@@ -7,12 +7,14 @@ import org.slf4j.LoggerFactory;
 import ru.study.library.enums.Status;
 import ru.study.library.model.User;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.study.library.Constants.XML_USER;
+import static ru.study.library.Constants.*;
+import static ru.study.library.Constants.CONFIG_PATH;
 import static ru.study.library.enums.Status.FAIL;
 import static ru.study.library.enums.Status.SUCCESS;
 import static ru.study.library.utils.ConfigurationUtil.getConfigurationEntry;
@@ -34,7 +36,6 @@ public class DataProviderXML implements IDataProvider {
             FileWriter writer = new FileWriter(getConfigurationEntry(key));
             Serializer serializer = new Persister();
             serializer.write(new WrapperXML<T>(list), writer);
-
             return SUCCESS;
         } catch (Exception exception) {
             log.error(String.valueOf(exception));
@@ -58,5 +59,4 @@ public class DataProviderXML implements IDataProvider {
         }
         return new ArrayList<>();
     }
-
 }

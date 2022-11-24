@@ -21,7 +21,7 @@ public class User implements Serializable {
         this.name = name;
         this.age = age;
     }
-
+    public User () { }
     public long getId() {
         return id;
     }

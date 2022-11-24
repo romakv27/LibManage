@@ -1,23 +1,24 @@
 package ru.study.library.api;
 
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 import java.util.List;
 
+@Root(name = "xml")
 public class WrapperXML<T> {
-    @ElementList(name ="conteiner")
-    private List<T> conteiner;
-
-    public WrapperXML(List<T> conteiner) {
-        this.conteiner = conteiner;
-    }
+    @ElementList(inline = true, required = false)
+    private List<T> container;
     public WrapperXML() { }
+    public WrapperXML(List<T> container) {
+        this.container = container;
+    }
 
     public List<T> getList() {
-        return conteiner;
+        return container;
     }
 
-    public void setList(List<T> conteiner) {
-        this.conteiner = conteiner;
+    public void setList(List<T> container) {
+        this.container = container;
     }
 }

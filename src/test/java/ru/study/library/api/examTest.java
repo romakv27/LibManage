@@ -10,7 +10,7 @@ public class examTest {
     final IDataProvider provider = new DataProviderXML();
 
     public User getUser(){
-        return new User(2L, "Ivan",  18);
+        return new User(1L, "Ivan",  18);
     }
 
     @Test

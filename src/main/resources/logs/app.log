@@ -11,3 +11,84 @@
 24.11.2022 12:56:56.366 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.PersistenceException: Constructor not matched for class ru.study.library.model.User
 24.11.2022 12:56:56.372 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
 24.11.2022 12:56:56.373 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:05:33.617 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:05:33.874 [main] ERROR  r.s.l.a.DataProviderXML - javax.xml.stream.XMLStreamException: ParseError at [row,col]:[1,1]
+Message: Premature end of file.
+24.11.2022 17:05:33.881 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:05:33.882 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:07:36.807 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.yml
+24.11.2022 17:07:36.829 [main] ERROR  r.s.l.a.DataProviderXML - java.lang.NullPointerException
+24.11.2022 17:07:36.836 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:07:36.836 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:07:36.837 [main] ERROR  r.s.l.a.DataProviderXML - java.lang.NullPointerException
+24.11.2022 17:19:56.673 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:19:56.874 [main] ERROR  r.s.l.a.DataProviderXML - javax.xml.stream.XMLStreamException: ParseError at [row,col]:[1,1]
+Message: Premature end of file.
+24.11.2022 17:19:56.892 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:19:56.892 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:49:20.717 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:49:20.920 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.PersistenceException: Constructor not matched for class ru.study.library.model.User
+24.11.2022 17:49:20.929 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:49:20.929 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:50:08.358 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:50:08.485 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.ElementException: Element 'conteiner' does not have a match in class ru.study.library.api.WrapperXML at line 2
+24.11.2022 17:50:08.492 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:50:08.493 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:51:01.407 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:51:01.556 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.PersistenceException: Constructor not matched for class ru.study.library.model.User
+24.11.2022 17:51:01.577 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:51:01.578 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:51:56.814 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:51:56.944 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.ElementException: Element 'object' does not have a match in class ru.study.library.api.WrapperXML at line 2
+24.11.2022 17:51:56.951 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:51:56.952 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:52:25.537 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:52:25.676 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.PersistenceException: Constructor not matched for class ru.study.library.model.User
+24.11.2022 17:52:25.683 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:52:25.684 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:52:52.212 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:52:52.334 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.ElementException: Element 'container' does not have a match in class ru.study.library.api.WrapperXML at line 2
+24.11.2022 17:52:52.341 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:52:52.341 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:57:57.994 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:57:58.136 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.PersistenceException: Constructor not matched for class ru.study.library.model.User
+24.11.2022 17:57:58.142 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:57:58.142 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:58:32.603 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:58:32.748 [main] ERROR  r.s.l.a.DataProviderXML - org.simpleframework.xml.core.PersistenceException: Constructor not matched for class ru.study.library.model.User
+24.11.2022 17:58:32.756 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:58:32.756 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:58:42.303 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:58:42.402 [main] ERROR  r.s.l.a.DataProviderXML - javax.xml.stream.XMLStreamException: ParseError at [row,col]:[1,1]
+Message: Premature end of file.
+24.11.2022 17:58:42.409 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:58:42.410 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 17:59:09.574 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 17:59:09.577 [main] ERROR  r.s.l.a.DataProviderXML - java.io.FileNotFoundException: src\main\resources\xml\User.xml (Не удается найти указанный файл)
+24.11.2022 17:59:09.584 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 17:59:09.584 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 18:00:03.710 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 18:00:03.870 [main] ERROR  r.s.l.a.DataProviderXML - String.valueOf(exception)
+24.11.2022 18:00:03.877 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}]
+24.11.2022 18:00:03.877 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+
+24.11.2022 18:15:55.998 [main] INFO  r.s.l.u.ConfigurationUtil:39 - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 18:15:56.004 [main] ERROR r.s.l.a.DataProviderXML:57 - java.io.FileNotFoundException: src\main\resources\xml\User.xml (Не удается найти указанный файл)
+24.11.2022 18:15:56.010 [main] DEBUG r.s.l.a.DataProviderXML:27 - [User{id=2, name='Ivan', age=18}]
+24.11.2022 18:15:56.010 [main] INFO  r.s.l.a.DataProviderXML:28 - CREATE_USER
+24.11.2022 18:16:57.823 [main] INFO  r.s.l.u.ConfigurationUtil:39 - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 18:16:57.966 [main] ERROR r.s.l.a.DataProviderXML:57 - org.simpleframework.xml.core.PersistenceException: Constructor not matched for class ru.study.library.model.User
+24.11.2022 18:16:57.972 [main] DEBUG r.s.l.a.DataProviderXML:27 - [User{id=2, name='Ivan', age=18}]
+24.11.2022 18:16:57.974 [main] INFO  r.s.l.a.DataProviderXML:28 - CREATE_USER
+24.11.2022 18:17:42.528 [main] INFO  r.s.l.u.ConfigurationUtil:39 - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 18:17:42.677 [main] DEBUG r.s.l.a.DataProviderXML:27 - [User{id=2, name='Ivan', age=18}, User{id=2, name='Ivan', age=18}]
+24.11.2022 18:17:42.678 [main] INFO  r.s.l.a.DataProviderXML:28 - CREATE_USER
+24.11.2022 18:20:55.614 INFO  r.s.l.u.ConfigurationUtil:39 - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 18:20:55.755 DEBUG r.s.l.a.DataProviderXML:27 - [User{id=2, name='Ivan', age=18}, User{id=2, name='Ivan', age=18}, User{id=2, name='Ivan', age=18}]
+24.11.2022 18:20:55.755 INFO  r.s.l.a.DataProviderXML:28 - CREATE_USER
+24.11.2022 18:22:01.915 [main] INFO   r.s.l.u.ConfigurationUtil - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 18:22:02.071 [main] DEBUG  r.s.l.a.DataProviderXML - [User{id=2, name='Ivan', age=18}, User{id=2, name='Ivan', age=18}, User{id=2, name='Ivan', age=18}, User{id=2, name='Ivan', age=18}]
+24.11.2022 18:22:02.073 [main] INFO   r.s.l.a.DataProviderXML - CREATE_USER
+24.11.2022 18:31:16.243 [main] INFO  r.s.l.u.ConfigurationUtil:39 - Configuration path: .\src\main\resources\enviroment.properties
+24.11.2022 18:31:16.374 [main] DEBUG r.s.l.a.DataProviderXML:29 - [User{id=1, name='Ivan', age=18}]
+24.11.2022 18:31:16.374 [main] INFO  r.s.l.a.DataProviderXML:30 - CREATE_USER

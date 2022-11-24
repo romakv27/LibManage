@@ -1,7 +1,0 @@
-<wrapperXML>
-   <conteiner class="java.util.ArrayList">
-      <object class="ru.study.library.model.User" name="Ivan" age="18">
-         <id>2</id>
-      </object>
-   </conteiner>
-</wrapperXML>
