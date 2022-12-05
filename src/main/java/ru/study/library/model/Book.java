@@ -1,5 +1,6 @@
 package ru.study.library.model;
 
+import com.opencsv.bean.CsvBindByPosition;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import ru.study.library.enums.TypeOfBook;
@@ -10,21 +11,27 @@ import java.util.Objects;
 public class Book implements Serializable {
 
     @Element
+    @CsvBindByPosition(position = 0)
     protected Long id;
 
     @Attribute
+    @CsvBindByPosition(position = 1)
     protected String title;
 
     @Attribute
+    @CsvBindByPosition(position = 2)
     protected String author;
 
     @Attribute
+    @CsvBindByPosition(position = 3)
     protected Integer numberOfPages;
 
     @Attribute
+    @CsvBindByPosition(position = 4)
     protected Integer ageRestriction;
 
     @Attribute
+    @CsvBindByPosition(position = 5)
     protected TypeOfBook typeOfBook;
 
     public Book(Long id, String title, String author, Integer numberOfPages, Integer ageRestriction, TypeOfBook typeOfBook) {

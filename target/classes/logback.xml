@@ -7,15 +7,15 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>src/main/resources/logs/app.log</file>
+        <file>log/app.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>src/main/resources/logs/archived/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>log/archived/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!-- Максимальный размер файлов 500 KB -->
             <maxFileSize>500KB</maxFileSize>
             <!-- Храним файлы логов 10 дней -->
             <maxHistory>10</maxHistory>
-            <!-- Максимальный размер файлов лога 200 MB -->
+            <!-- Максимальный размер файла лога 200 MB -->
             <totalSizeCap>200MB</totalSizeCap>
         </rollingPolicy>
         <encoder>

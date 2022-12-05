@@ -1,5 +1,6 @@
 package ru.study.library.model;
 
+import com.opencsv.bean.CsvBindByPosition;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 
@@ -8,12 +9,15 @@ import java.util.Objects;
 
 public class User implements Serializable {
     @Element
+    @CsvBindByPosition(position = 0)
     private Long id;
 
     @Attribute
+    @CsvBindByPosition(position = 1)
     private String name;
 
     @Attribute
+    @CsvBindByPosition(position = 2)
     private int age;
 
     public User(Long id, String name, int age) {

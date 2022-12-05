@@ -1,5 +1,6 @@
 package ru.study.library.model;
 
+import com.opencsv.bean.CsvBindByPosition;
 import org.simpleframework.xml.Attribute;
 import ru.study.library.enums.TypeOfBook;
 
@@ -8,9 +9,11 @@ import java.util.Objects;
 public class Children extends ArtBook{
 
     @Attribute
+    @CsvBindByPosition(position = 8)
     private Boolean educational;
 
     @Attribute
+    @CsvBindByPosition(position = 9)
     private Boolean interactive;
 
     public Children(Long id, String title, String author, Integer numberOfPages, Integer ageRestriction, String genre, Boolean comics, Boolean educational, Boolean interactive) {

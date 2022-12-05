@@ -1,5 +1,6 @@
 package ru.study.library.model;
 
+import com.opencsv.bean.CsvBindByPosition;
 import org.simpleframework.xml.Attribute;
 import ru.study.library.enums.TypeOfBook;
 
@@ -8,9 +9,11 @@ import java.util.Objects;
 public class Scientific extends Book {
 
     @Attribute
+    @CsvBindByPosition(position = 6)
     private String direction;
 
     @Attribute
+    @CsvBindByPosition(position = 7)
     private Boolean forStudy;
 
     public Scientific(Long id, String title, String author, Integer numberOfPages, Integer ageRestriction, String direction, Boolean forStudy) {

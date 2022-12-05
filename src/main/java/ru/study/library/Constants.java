@@ -40,6 +40,12 @@ public class Constants {
     public static final String XML_LIBRARY = "xmlLibrary";
     public static final String XML_USER = "xmlUser";
 
+    public static final String CSV_USER = "csvUser";
+    public static final String CSV_ARTBOOK = "csvArtBook";
+    public static final String CSV_SCIENTIFIC = "csvScientific";
+    public static final String CSV_CHILDREN = "csvChildren";
+    public static final String CSV_LIBRARY = "csvLibrary";
+
     //Massages ERROR
     public static final String ERROR_ID_EXIST = "This id exist";
     public static final String ERROR_ID_NOT_EXIST = "This id not exist";

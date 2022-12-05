@@ -60,6 +60,7 @@ public class MongoDB {
             log.error(String.valueOf(e));
             throw e;
         }
+
     }
 
     public static void saveToLog(HistoryContent content) {

@@ -1,7 +1,10 @@
 package ru.study.library.api;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.study.library.Constants;
@@ -14,13 +17,14 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.singletonList;
 import static ru.study.library.Constants.*;
 import static ru.study.library.enums.Status.FAIL;
 import static ru.study.library.enums.Status.SUCCESS;
 import static ru.study.library.utils.ConfigurationUtil.getConfigurationEntry;
 
-public class DataProviderXML implements IDataProvider {
-    private static final Logger log = LoggerFactory.getLogger(DataProviderXML.class);
+public class DataProviderCSV implements IDataProvider{
+    public static final Logger log = LoggerFactory.getLogger(DataProviderCSV.class);
 
     @Override
     public Status addBook(String method, ArtBook artBook, Scientific scientific, Children children) {
@@ -53,7 +57,7 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addArtBook(ArtBook artBook) {
-        List<ArtBook> books = extract(XML_ARTBOOK, ArtBook.class);
+        List<ArtBook> books = extract(CSV_ARTBOOK, ArtBook.class);
         if (getArtBookById(artBook.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
             saveHistory(createHistoryContent(artBook, FAIL));
@@ -63,15 +67,15 @@ public class DataProviderXML implements IDataProvider {
         log.debug(books.toString());
         log.info(CREATE_ART);
         saveHistory(createHistoryContent(artBook,Status.SUCCESS));
-        return insert(XML_ARTBOOK, books);
+        return insert(CSV_ARTBOOK, singletonList(artBook), true);
     }
 
     @Override
     public Optional<ArtBook> getArtBookById(Long id) {
-        if (extract(XML_ARTBOOK, ArtBook.class).stream().anyMatch(o -> o.getId().equals(id))){
+        if (extract(CSV_ARTBOOK, ArtBook.class).stream().anyMatch(o -> o.getId().equals(id))){
             log.info(GET_ART);
             saveHistory(createHistoryContent(id,Status.SUCCESS));
-            return extract(XML_ARTBOOK, ArtBook.class)
+            return extract(CSV_ARTBOOK, ArtBook.class)
                     .stream().filter(bean -> bean.getId().equals(id)).findFirst();
         }
         log.error(ERROR_ID_NOT_EXIST);
@@ -81,7 +85,7 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addScientificBook(Scientific scientific) {
-        List<Scientific> books = extract(XML_SCIENTIFIC, Scientific.class);
+        List<Scientific> books = extract(CSV_SCIENTIFIC, Scientific.class);
         if (getScientificBookById(scientific.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
             saveHistory(createHistoryContent(scientific, FAIL));
@@ -91,15 +95,15 @@ public class DataProviderXML implements IDataProvider {
         log.debug(books.toString());
         log.info(CREATE_SCIENTIFIC);
         saveHistory(createHistoryContent(scientific,Status.SUCCESS));
-        return insert(XML_SCIENTIFIC, books);
+        return insert(CSV_SCIENTIFIC, singletonList(scientific), true);
     }
 
     @Override
     public Optional<Scientific> getScientificBookById(Long id) {
-        if (extract(XML_SCIENTIFIC, Scientific.class).stream().anyMatch(o -> o.getId().equals(id))){
+        if (extract(CSV_SCIENTIFIC, Scientific.class).stream().anyMatch(o -> o.getId().equals(id))){
             log.info(GET_SCIENTIFIC);
             saveHistory(createHistoryContent(id,Status.SUCCESS));
-            return extract(XML_SCIENTIFIC, Scientific.class)
+            return extract(CSV_SCIENTIFIC, Scientific.class)
                     .stream().filter(bean -> bean.getId().equals(id)).findFirst();
         }
         log.error(ERROR_ID_NOT_EXIST);
@@ -109,25 +113,23 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addChildren(Children children) {
-        List<Children> books = extract(XML_CHILDREN, Children.class);
+        List<Children> books = extract(CSV_CHILDREN, Children.class);
         if (getChildrenBookById(children.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
-            saveHistory(createHistoryContent(children, FAIL));
             return FAIL;
         }
         books.add(children);
         log.debug(books.toString());
         log.info(CREATE_CHILDREN);
-        saveHistory(createHistoryContent(children, SUCCESS));
-        return insert(XML_CHILDREN, books);
+        return insert(CSV_CHILDREN, singletonList(children), true);
     }
 
     @Override
     public Optional<Children> getChildrenBookById(Long id) {
-        if (extract(XML_CHILDREN, Children.class).stream().anyMatch(o -> o.getId().equals(id))){
+        if (extract(CSV_CHILDREN, Children.class).stream().anyMatch(o -> o.getId().equals(id))){
             log.info(GET_CHILDREN);
             saveHistory(createHistoryContent(id,Status.SUCCESS));
-            return extract(XML_CHILDREN, Children.class)
+            return extract(CSV_CHILDREN, Children.class)
                     .stream().filter(bean -> bean.getId().equals(id)).findFirst();
         }
         log.error(ERROR_ID_NOT_EXIST);
@@ -137,7 +139,7 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addBookToLibrary(Library library) {
-        List<Library> list = extract(XML_LIBRARY, Library.class);
+        List<Library> list = extract(CSV_LIBRARY, Library.class);
         if (list.stream().anyMatch(o -> o.getId().equals(library.getId()))) {
             log.error(ERROR_ID_EXIST);
             saveHistory(createHistoryContent(library, FAIL));
@@ -147,7 +149,7 @@ public class DataProviderXML implements IDataProvider {
         log.debug(list.toString());
         log.info(ADD_BOOK_TO_LIBRARY);
         saveHistory(createHistoryContent(library, SUCCESS));
-        return insert(XML_LIBRARY, list);
+        return insert(CSV_LIBRARY, singletonList(library), true);
     }
 
     @Override
@@ -169,7 +171,7 @@ public class DataProviderXML implements IDataProvider {
             switch (method){
                 case ALL_USER_REVIEWS:
                 case ALL_USER_RATINGS:
-                    if(extract(XML_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))){
+                    if(extract(CSV_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))){
                         saveHistory(createHistoryContent(userId, SUCCESS));
                         return SUCCESS;
                     }
@@ -177,6 +179,7 @@ public class DataProviderXML implements IDataProvider {
             }
         }catch (Exception e) {
             log.error(String.valueOf(e));
+            log.error(ERROR_COMMAND);
             return FAIL;
         }
         log.error(ERROR_COMMAND);
@@ -187,13 +190,13 @@ public class DataProviderXML implements IDataProvider {
     @Override
     public List<String> allUserReviews(Long userId) {
         try {
-            if(extract(XML_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))) {
+            if(extract(CSV_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))) {
                 log.info(GET_USER_REVIEW);
                 saveHistory(createHistoryContent(userId, SUCCESS));
-                return extract(XML_LIBRARY, Library.class)
+                return extract(CSV_LIBRARY, Library.class)
                         .stream().filter(o -> o.getUser().getId().equals(userId)).map(Library::getReview).collect(Collectors.toList());
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             log.error(String.valueOf(e));
         }
         log.error(ERROR_ID_NOT_EXIST);
@@ -204,13 +207,13 @@ public class DataProviderXML implements IDataProvider {
     @Override
     public List<Short> allUserRatings(Long userId) {
         try {
-            if(extract(XML_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))) {
+            if(extract(CSV_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))) {
                 log.info(GET_USER_RATING);
                 saveHistory(createHistoryContent(userId, SUCCESS));
-                return extract(XML_LIBRARY, Library.class)
+                return extract(CSV_LIBRARY, Library.class)
                         .stream().filter(o -> o.getUser().getId().equals(userId)).map(Library::getRating).collect(Collectors.toList());
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             log.error(String.valueOf(e));
         }
         log.error(ERROR_ID_NOT_EXIST);
@@ -220,39 +223,38 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status delBookByTypeAndId(TypeOfBook typeOfBook, Long id) {
-        insert(XML_LIBRARY, extract(XML_LIBRARY, Library.class)
+        insert(CSV_LIBRARY, extract(CSV_LIBRARY, Library.class)
                 .stream().filter(o -> !(o.getBook().getTypeOfBook().equals(typeOfBook) &&
-                        o.getBook().getId().equals(id))).collect(Collectors.toList()));
+                        o.getBook().getId().equals(id))).collect(Collectors.toList()), false);
         try {
             switch (typeOfBook) {
                 case ART -> {
-                    List<ArtBook> artBookList = extract(XML_ARTBOOK, ArtBook.class);
+                    List<ArtBook> artBookList = extract(CSV_ARTBOOK, ArtBook.class);
                     if (getArtBookById(id).isPresent()) {
                         artBookList.removeIf(bean -> bean.getId().equals(id));
                         log.info(DELETE_ART);
-                        return insert(XML_ARTBOOK, artBookList);
+                        return insert(CSV_ARTBOOK, artBookList, false);
                     }
                     return FAIL;
                 }
                 case SCIENTIFIC -> {
-                    List<Scientific> scientificList = extract(XML_SCIENTIFIC, Scientific.class);
+                    List<Scientific> scientificList = extract(CSV_SCIENTIFIC, Scientific.class);
                     if (getScientificBookById(id).isPresent()) {
                         scientificList.removeIf(bean -> bean.getId().equals(id));
                         log.info(DELETE_SCIENTIFIC);
-                        return insert(XML_SCIENTIFIC, scientificList);
+                        return insert(CSV_SCIENTIFIC, scientificList, false);
                     }
                     return FAIL;
                 }
                 case CHILDREN -> {
-                    List<Children> childrenList = extract(XML_CHILDREN, Children.class);
+                    List<Children> childrenList = extract(CSV_CHILDREN, Children.class);
                     if (getChildrenBookById(id).isPresent()) {
                         childrenList.removeIf(bean -> bean.getId().equals(id));
                         log.info(DELETE_CHILDREN);
-                        return insert(XML_CHILDREN, childrenList);
+                        return insert(CSV_CHILDREN, childrenList, false);
                     }
                     return FAIL;
                 }
-                default -> throw new IllegalStateException("Unexpected value: " + typeOfBook);
             }
         }catch (Exception  e) {
             log.error(String.valueOf(e));
@@ -279,33 +281,29 @@ public class DataProviderXML implements IDataProvider {
     @Override
     public Status delBookInLibrary(Book book) {
         saveHistory(createHistoryContent(book,Status.SUCCESS));
-        return insert(XML_LIBRARY, extract(XML_LIBRARY, Library.class)
+        return insert(CSV_LIBRARY, extract(CSV_LIBRARY, Library.class)
                 .stream().filter(o -> !(o.getBook().getId().equals(book.getId()) && o.getBook().getTypeOfBook()
-                        .equals(book.getTypeOfBook()))).collect(Collectors.toList()));
+                        .equals(book.getTypeOfBook()))).collect(Collectors.toList()), false);
     }
 
     @Override
     public Status createUser(User user) {
-        List<User> users = extract(XML_USER, User.class);
         if (getUserById(user.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
-            saveHistory(createHistoryContent(users,Status.FAIL));
+            saveHistory(createHistoryContent(user,Status.FAIL));
             return FAIL;
         }
-        users.add(user);
-        log.debug(users.toString());
         log.info(CREATE_USER);
-        saveHistory(createHistoryContent(users,Status.SUCCESS));
-        return insert(XML_USER, users);
+        saveHistory(createHistoryContent(user,Status.SUCCESS));
+        return insert(CSV_USER, Collections.singletonList(user),true);
     }
 
     @Override
     public Optional<User> getUserById(Long userId) {
-        if (extract(XML_USER, User.class).stream().anyMatch(o -> o.getId().equals(userId))){
-            log.info(GET_USER);
+        if (extract(CSV_USER, User.class).stream().anyMatch(o -> o.getId().equals(userId))) {
             saveHistory(createHistoryContent(userId,Status.SUCCESS));
-            return extract(XML_USER, User.class)
-                    .stream().filter(bean -> bean.getId().equals(userId)).findFirst();
+            return extract(CSV_USER, User.class)
+                    .stream().filter(user -> user.getId().equals(userId)).findFirst();
         }
         log.error(ERROR_ID_NOT_EXIST);
         saveHistory(createHistoryContent(userId,Status.FAIL));
@@ -314,38 +312,40 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status updateUser(User user) {
-        List<User> users = extract(XML_USER, User.class);
+        List<User> users = extract(CSV_USER, User.class);
         if (users.stream().noneMatch(bean -> bean.getId().equals(user.getId()))) {
             log.error(ERROR_ID_NOT_EXIST);
             saveHistory(createHistoryContent(users, FAIL));
             return FAIL;
         }
-        users.removeIf(bean -> bean.getId().equals(user.getId()));
-        users.add(user);
+        if (getUserById(user.getId()).isPresent()) {
+            deleteUserById(user.getId());
+        }
         log.info(UPDATE_USER);
-        log.debug(users.toString());
         saveHistory(createHistoryContent(users,Status.SUCCESS));
-        return insert(XML_USER, users);
+        return createUser(user);
     }
 
     @Override
     public Status deleteUserById(Long userId) {
-        List<User> users = extract(XML_USER, User.class);
+        List<User> users = extract(CSV_USER, User.class);
         if (getUserById(userId).isPresent()) {
             users.removeIf(bean -> bean.getId().equals(userId));
             log.info(DELETE_USER);
             saveHistory(createHistoryContent(users,Status.SUCCESS));
-            return insert(XML_USER, users);
+            return insert(CSV_USER, users, false);
         }
         saveHistory(createHistoryContent(users, FAIL));
         return FAIL;
     }
 
-    public  <T> Status insert(String key, List<T> list) {
+    public <T> Status insert(String key, List<T> list, boolean append){
         try {
-            FileWriter writer = new FileWriter(getConfigurationEntry(key));
-            Serializer serializer = new Persister();
-            serializer.write(new WrapperXML<T>(list), writer);
+            FileWriter writer = new FileWriter(getConfigurationEntry(key), append);
+            CSVWriter csvWriter = new CSVWriter(writer);
+            StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(csvWriter).withApplyQuotesToAll(false).build();
+            beanToCsv.write(list);
+            csvWriter.close();
             return SUCCESS;
         } catch (Exception exception) {
             log.error(String.valueOf(exception));
@@ -353,21 +353,17 @@ public class DataProviderXML implements IDataProvider {
         return FAIL;
     }
 
-    public  <T> List<T> extract(String key, Class<T> c) {
+    public <T> List <T> extract(String key, Class<T> c){
+        List <T> list = new ArrayList<>();
         try {
             FileReader reader = new FileReader(getConfigurationEntry(key));
-            Serializer serializer = new Persister();
-            WrapperXML<T> container = serializer.read(WrapperXML.class, reader);
-            reader.close();
-            if (container.getList() == null) {
-                container.setList(new ArrayList<>());
-            } else {
-                return container.getList();
-            }
+            CSVReader csvReader = new CSVReader(reader);
+            list = new CsvToBeanBuilder<T>(csvReader).withType(c).build().parse();
+            csvReader.close();
         } catch (Exception exception) {
             log.error(String.valueOf(exception));
         }
-        return new ArrayList<>();
+        return list;
     }
 
     protected HistoryContent createHistoryContent(Object object, Status status) {

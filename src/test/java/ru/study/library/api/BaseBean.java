@@ -24,7 +24,7 @@ public class BaseBean {
     }
 
     public Children getChildren(){
-        return new Children(1L, "Kolobok", "Ushinski", 50, 2, "The story", false, false, false);
+        return new Children(1L, "Kolobok", "Ushinski", 50, 2, "The story", true, false, false);
     }
 
     public Library getLibrary(){

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 import static ru.study.library.enums.Status.FAIL;
 import static ru.study.library.enums.Status.SUCCESS;
 
-public class examTest extends BaseBean{
+public class DataProviderXMLTest extends BaseBean{
     final IDataProvider provider = new DataProviderXML();
     Status result;
 

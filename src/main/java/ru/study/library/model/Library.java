@@ -1,19 +1,27 @@
 package ru.study.library.model;
 
+import com.opencsv.bean.CsvBindByPosition;
+import com.opencsv.bean.CsvCustomBindByPosition;
+import ru.study.library.converters.BookConverter;
+import ru.study.library.converters.UserConverter;
 
 import java.util.Objects;
 
-
 public class Library {
 
+    @CsvBindByPosition(position = 0)
     private Long id;
 
+    @CsvCustomBindByPosition(position = 1, converter = BookConverter.class)
     private Book book;
 
+    @CsvCustomBindByPosition(position = 2, converter = UserConverter.class)
     private User user;
 
+    @CsvBindByPosition(position = 3)
     private String review;
 
+    @CsvBindByPosition(position = 4)
     private Short rating;
 
     public Library(Long id, Book book, User user, String review, Short rating) {
