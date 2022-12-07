@@ -1,7 +1,5 @@
 package ru.study.library.api;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.study.library.Constants;
@@ -9,8 +7,7 @@ import ru.study.library.enums.Status;
 import ru.study.library.enums.TypeOfBook;
 import ru.study.library.model.*;
 
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,8 +16,15 @@ import static ru.study.library.enums.Status.FAIL;
 import static ru.study.library.enums.Status.SUCCESS;
 import static ru.study.library.utils.ConfigurationUtil.getConfigurationEntry;
 
-public class DataProviderXML implements IDataProvider {
-    private static final Logger log = LoggerFactory.getLogger(DataProviderXML.class);
+public class DataProviderJDBC implements IDataProvider{
+    public static final Logger log = LoggerFactory.getLogger(DataProviderJDBC.class);
+
+    protected Connection connection() throws Exception {
+        return DriverManager.getConnection(
+                getConfigurationEntry(DB_URL),
+                getConfigurationEntry(DB_USER),
+                getConfigurationEntry(DB_PASSWORD));
+    }
 
     @Override
     public Status addBook(String method, ArtBook artBook, Scientific scientific, Children children) {
@@ -53,26 +57,30 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addArtBook(ArtBook artBook) {
-        List<ArtBook> books = extract(XML_ARTBOOK, ArtBook.class);
         if (getArtBookById(artBook.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
             saveHistory(createHistoryContent(artBook, FAIL));
             return FAIL;
         }
-        books.add(artBook);
-        log.debug(books.toString());
         log.info(CREATE_ART);
         saveHistory(createHistoryContent(artBook,Status.SUCCESS));
-        return insert(XML_ARTBOOK, books);
+        return insert(String.format(SQL_CREATE_ART_BOOK, artBook.getId(), artBook.getTitle(), artBook.getAuthor(),
+                artBook.getNumberOfPages(), artBook.getAgeRestriction(), artBook.getTypeOfBook().name(), artBook.getGenre(),
+                artBook.getComics()?1:0));
     }
 
     @Override
     public Optional<ArtBook> getArtBookById(Long id) {
-        if (extract(XML_ARTBOOK, ArtBook.class).stream().anyMatch(o -> o.getId().equals(id))){
-            log.info(GET_ART);
-            saveHistory(createHistoryContent(id,Status.SUCCESS));
-            return extract(XML_ARTBOOK, ArtBook.class)
-                    .stream().filter(bean -> bean.getId().equals(id)).findFirst();
+        ResultSet query = extract(String.format(SQL_GET_ART_BOOK_BY_ID, id));
+        try {
+            if (query != null && query.next()) {
+                log.info(GET_ART);
+                saveHistory(createHistoryContent(id,Status.SUCCESS));
+                return Optional.of(new ArtBook(query.getLong(1), query.getString(2), query.getString(3),
+                        query.getInt(4), query.getInt(5), query.getString(7), query.getInt(8) == 1));
+            }
+        } catch (SQLException exception) {
+            log.error(String.valueOf(exception));
         }
         log.error(ERROR_ID_NOT_EXIST);
         saveHistory(createHistoryContent(id, FAIL));
@@ -81,26 +89,31 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addScientificBook(Scientific scientific) {
-        List<Scientific> books = extract(XML_SCIENTIFIC, Scientific.class);
         if (getScientificBookById(scientific.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
             saveHistory(createHistoryContent(scientific, FAIL));
             return FAIL;
         }
-        books.add(scientific);
-        log.debug(books.toString());
         log.info(CREATE_SCIENTIFIC);
         saveHistory(createHistoryContent(scientific,Status.SUCCESS));
-        return insert(XML_SCIENTIFIC, books);
+        return insert(String.format(SQL_CREATE_SCIENTIFIC_BOOK, scientific.getId(), scientific.getTitle(),
+                scientific.getAuthor(), scientific.getNumberOfPages(), scientific.getAgeRestriction(),
+                scientific.getTypeOfBook().name(), scientific.getDirection(), scientific.getForStudy()?1:0));
     }
 
     @Override
     public Optional<Scientific> getScientificBookById(Long id) {
-        if (extract(XML_SCIENTIFIC, Scientific.class).stream().anyMatch(o -> o.getId().equals(id))){
-            log.info(GET_SCIENTIFIC);
-            saveHistory(createHistoryContent(id,Status.SUCCESS));
-            return extract(XML_SCIENTIFIC, Scientific.class)
-                    .stream().filter(bean -> bean.getId().equals(id)).findFirst();
+        ResultSet query = extract(String.format(SQL_GET_SCIENTIFIC_BOOK_BY_ID, id));
+        try {
+            if (query != null && query.next()) {
+                log.info(GET_SCIENTIFIC);
+                saveHistory(createHistoryContent(id,Status.SUCCESS));
+                return Optional.of(new Scientific(query.getLong(1), query.getString(2),
+                        query.getString(3), query.getInt(4), query.getInt(5),
+                        query.getString(7), query.getInt(8) == 1));
+            }
+        } catch (SQLException exception) {
+            log.error(String.valueOf(exception));
         }
         log.error(ERROR_ID_NOT_EXIST);
         saveHistory(createHistoryContent(id, FAIL));
@@ -109,26 +122,33 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addChildren(Children children) {
-        List<Children> books = extract(XML_CHILDREN, Children.class);
         if (getChildrenBookById(children.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
             saveHistory(createHistoryContent(children, FAIL));
             return FAIL;
         }
-        books.add(children);
-        log.debug(books.toString());
         log.info(CREATE_CHILDREN);
         saveHistory(createHistoryContent(children, SUCCESS));
-        return insert(XML_CHILDREN, books);
+        return insert(String.format(SQL_CREATE_CHILDREN_BOOK, children.getId(), children.getTitle(),
+                children.getAuthor(), children.getNumberOfPages(), children.getAgeRestriction(),
+                children.getTypeOfBook().name(), children.getGenre(), children.getComics()?1:0,
+                children.getEducational()?1:0, children.getInteractive()?1:0));
     }
 
     @Override
     public Optional<Children> getChildrenBookById(Long id) {
-        if (extract(XML_CHILDREN, Children.class).stream().anyMatch(o -> o.getId().equals(id))){
-            log.info(GET_CHILDREN);
-            saveHistory(createHistoryContent(id,Status.SUCCESS));
-            return extract(XML_CHILDREN, Children.class)
-                    .stream().filter(bean -> bean.getId().equals(id)).findFirst();
+        ResultSet query = extract(String.format(SQL_GET_CHILDREN_BOOK_BY_ID, id));
+        try {
+            if (query != null && query.next()) {
+                log.info(GET_CHILDREN);
+                saveHistory(createHistoryContent(id,Status.SUCCESS));
+                return Optional.of(new Children(query.getLong(1), query.getString(2),
+                        query.getString(3), query.getInt(4), query.getInt(5),
+                        query.getString(7), query.getInt(8) == 1,
+                        query.getInt(9) == 1, query.getInt(10) == 1));
+            }
+        } catch (SQLException exception) {
+            log.error(String.valueOf(exception));
         }
         log.error(ERROR_ID_NOT_EXIST);
         saveHistory(createHistoryContent(id, FAIL));
@@ -137,17 +157,8 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Status addBookToLibrary(Library library) {
-        List<Library> list = extract(XML_LIBRARY, Library.class);
-        if (list.stream().anyMatch(o -> o.getId().equals(library.getId()))) {
-            log.error(ERROR_ID_EXIST);
-            saveHistory(createHistoryContent(library, FAIL));
-            return FAIL;
-        }
-        list.add(checkAge(library));
-        log.debug(list.toString());
-        log.info(ADD_BOOK_TO_LIBRARY);
-        saveHistory(createHistoryContent(library, SUCCESS));
-        return insert(XML_LIBRARY, list);
+        return insert(String.format(SQL_ADD_BOOK_TO_LIBRARY, library.getId(), library.getBook().getId(),
+                library.getUser().getId(), library.getReview(), library.getRating(), library.getBook().getTypeOfBook().name()));
     }
 
     @Override
@@ -169,7 +180,7 @@ public class DataProviderXML implements IDataProvider {
             switch (method){
                 case ALL_USER_REVIEWS:
                 case ALL_USER_RATINGS:
-                    if(extract(XML_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))){
+                    if(getAllLibrary().stream().anyMatch(o -> o.getUser().getId().equals(userId))){
                         saveHistory(createHistoryContent(userId, SUCCESS));
                         return SUCCESS;
                     }
@@ -177,6 +188,7 @@ public class DataProviderXML implements IDataProvider {
             }
         }catch (Exception e) {
             log.error(String.valueOf(e));
+            log.error(ERROR_COMMAND);
             return FAIL;
         }
         log.error(ERROR_COMMAND);
@@ -186,73 +198,57 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public List<String> allUserReviews(Long userId) {
-        try {
-            if(extract(XML_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))) {
-                log.info(GET_USER_REVIEW);
-                saveHistory(createHistoryContent(userId, SUCCESS));
-                return extract(XML_LIBRARY, Library.class)
-                        .stream().filter(o -> o.getUser().getId().equals(userId)).map(Library::getReview).collect(Collectors.toList());
-            }
-        } catch (Exception e) {
-            log.error(String.valueOf(e));
-        }
-        log.error(ERROR_ID_NOT_EXIST);
-        saveHistory(createHistoryContent(userId, FAIL));
-        return List.of();
+        return getAllLibrary().stream().filter(o -> o.getUser().getId().equals(userId)).map(Library::getReview).collect(Collectors.toList());
     }
 
     @Override
     public List<Short> allUserRatings(Long userId) {
+        return getAllLibrary().stream().filter(o -> o.getUser().getId().equals(userId)).map(Library::getRating).collect(Collectors.toList());
+    }
+
+    protected List<Library> getAllLibrary() {
+        ResultSet query = extract(SQL_GET_ALL_LIBRARY);
+        List<Library> list = new ArrayList<>();
         try {
-            if(extract(XML_LIBRARY, Library.class).stream().anyMatch(o -> o.getUser().getId().equals(userId))) {
-                log.info(GET_USER_RATING);
-                saveHistory(createHistoryContent(userId, SUCCESS));
-                return extract(XML_LIBRARY, Library.class)
-                        .stream().filter(o -> o.getUser().getId().equals(userId)).map(Library::getRating).collect(Collectors.toList());
+            while (query != null && query.next()) {
+                Library obj = new Library(query.getLong(1), query.getString(4), query.getShort(5));
+                obj.setUser(getUserById(query.getLong(3)).orElseThrow(() -> {
+                    throw new UnsupportedOperationException("User is not exists");
+                }));
+                list.add(obj);
             }
-        } catch (Exception e) {
-            log.error(String.valueOf(e));
+        } catch (SQLException exception) {
+            log.error(String.valueOf(exception));
         }
-        log.error(ERROR_ID_NOT_EXIST);
-        saveHistory(createHistoryContent(userId, FAIL));
-        return List.of();
+        return list;
     }
 
     @Override
     public Status delBookByTypeAndId(TypeOfBook typeOfBook, Long id) {
-        insert(XML_LIBRARY, extract(XML_LIBRARY, Library.class)
-                .stream().filter(o -> !(o.getBook().getTypeOfBook().equals(typeOfBook) &&
-                        o.getBook().getId().equals(id))).collect(Collectors.toList()));
+        insert(String.format(SQL_DEL_LIBRARY, id, typeOfBook.name()));
         try {
             switch (typeOfBook) {
                 case ART -> {
-                    List<ArtBook> artBookList = extract(XML_ARTBOOK, ArtBook.class);
                     if (getArtBookById(id).isPresent()) {
-                        artBookList.removeIf(bean -> bean.getId().equals(id));
                         log.info(DELETE_ART);
-                        return insert(XML_ARTBOOK, artBookList);
+                        return insert(String.format(SQL_DEL_ART_BOOK, id));
                     }
                     return FAIL;
                 }
                 case SCIENTIFIC -> {
-                    List<Scientific> scientificList = extract(XML_SCIENTIFIC, Scientific.class);
                     if (getScientificBookById(id).isPresent()) {
-                        scientificList.removeIf(bean -> bean.getId().equals(id));
                         log.info(DELETE_SCIENTIFIC);
-                        return insert(XML_SCIENTIFIC, scientificList);
+                        return insert(String.format(SQL_DEL_SCIENTIFIC_BOOK, id));
                     }
                     return FAIL;
                 }
                 case CHILDREN -> {
-                    List<Children> childrenList = extract(XML_CHILDREN, Children.class);
                     if (getChildrenBookById(id).isPresent()) {
-                        childrenList.removeIf(bean -> bean.getId().equals(id));
                         log.info(DELETE_CHILDREN);
-                        return insert(XML_CHILDREN, childrenList);
+                        return insert(String.format(SQL_DEL_CHILDREN_BOOK, id));
                     }
                     return FAIL;
                 }
-                default -> throw new IllegalStateException("Unexpected value: " + typeOfBook);
             }
         }catch (Exception  e) {
             log.error(String.valueOf(e));
@@ -262,7 +258,8 @@ public class DataProviderXML implements IDataProvider {
 
     @Override
     public Optional<? extends Book> getBookByTypeAndId(TypeOfBook typeOfBook, Long id) {
-        try{switch (typeOfBook) {
+        try{
+            switch (typeOfBook) {
             case SCIENTIFIC:
                 return getScientificBookById(id);
             case ART:
@@ -279,73 +276,65 @@ public class DataProviderXML implements IDataProvider {
     @Override
     public Status delBookInLibrary(Book book) {
         saveHistory(createHistoryContent(book,Status.SUCCESS));
-        return insert(XML_LIBRARY, extract(XML_LIBRARY, Library.class)
-                .stream().filter(o -> !(o.getBook().getId().equals(book.getId()) && o.getBook().getTypeOfBook()
-                        .equals(book.getTypeOfBook()))).collect(Collectors.toList()));
+        return insert(String.format(SQL_DEL_LIBRARY, book.getId(), book.getTypeOfBook().name()));
     }
 
     @Override
     public Status createUser(User user) {
-        List<User> users = extract(XML_USER, User.class);
         if (getUserById(user.getId()).isPresent()) {
             log.error(ERROR_ID_EXIST);
-            saveHistory(createHistoryContent(users,Status.FAIL));
+            saveHistory(createHistoryContent(user,Status.FAIL));
             return FAIL;
         }
-        users.add(user);
-        log.debug(users.toString());
         log.info(CREATE_USER);
-        saveHistory(createHistoryContent(users,Status.SUCCESS));
-        return insert(XML_USER, users);
+        saveHistory(createHistoryContent(user,Status.SUCCESS));
+        return insert(String.format(SQL_CREATE_USER, user.getId(), user.getName(), user.getAge()));
     }
 
     @Override
     public Optional<User> getUserById(Long userId) {
-        if (extract(XML_USER, User.class).stream().anyMatch(o -> o.getId().equals(userId))){
-            log.info(GET_USER);
-            saveHistory(createHistoryContent(userId,Status.SUCCESS));
-            return extract(XML_USER, User.class)
-                    .stream().filter(bean -> bean.getId().equals(userId)).findFirst();
+        ResultSet query = extract(String.format(SQL_GET_USER_BY_ID, userId));
+        try {
+            if (query != null && query.next()) {
+                saveHistory(createHistoryContent(userId,Status.SUCCESS));
+                return Optional.of(new User(query.getLong(1), query.getString(2), query.getInt(3)));
+            }
+        } catch (SQLException exception) {
+            log.error(String.valueOf(exception));
         }
-        log.error(ERROR_ID_NOT_EXIST);
         saveHistory(createHistoryContent(userId,Status.FAIL));
         return Optional.empty();
     }
 
     @Override
     public Status updateUser(User user) {
-        List<User> users = extract(XML_USER, User.class);
-        if (users.stream().noneMatch(bean -> bean.getId().equals(user.getId()))) {
-            log.error(ERROR_ID_NOT_EXIST);
-            saveHistory(createHistoryContent(users, FAIL));
-            return FAIL;
+        if (getUserById(user.getId()).isPresent()) {
+            log.info(UPDATE_USER);
+            saveHistory(createHistoryContent(user,Status.SUCCESS));
+            return insert(String.format(SQL_UPD_USER, user.getName(), user.getAge(), user.getId()));
         }
-        users.removeIf(bean -> bean.getId().equals(user.getId()));
-        users.add(user);
-        log.info(UPDATE_USER);
-        log.debug(users.toString());
-        saveHistory(createHistoryContent(users,Status.SUCCESS));
-        return insert(XML_USER, users);
+        log.error(ERROR_ID_NOT_EXIST);
+        saveHistory(createHistoryContent(user, FAIL));
+        return FAIL;
     }
 
     @Override
     public Status deleteUserById(Long userId) {
-        List<User> users = extract(XML_USER, User.class);
         if (getUserById(userId).isPresent()) {
-            users.removeIf(bean -> bean.getId().equals(userId));
             log.info(DELETE_USER);
-            saveHistory(createHistoryContent(users,Status.SUCCESS));
-            return insert(XML_USER, users);
+            saveHistory(createHistoryContent(userId,Status.SUCCESS));
+            return insert(String.format(SQL_DEL_USER, userId));
         }
-        saveHistory(createHistoryContent(users, FAIL));
+        log.error(ERROR_ID_NOT_EXIST);
+        saveHistory(createHistoryContent(userId, FAIL));
         return FAIL;
     }
 
-    public  <T> Status insert(String key, List<T> list) {
+    protected Status insert(String sql) {
         try {
-            FileWriter writer = new FileWriter(getConfigurationEntry(key));
-            Serializer serializer = new Persister();
-            serializer.write(new WrapperXML<T>(list), writer);
+            PreparedStatement statement = connection().prepareStatement(sql);
+            statement.executeUpdate();
+            connection().close();
             return SUCCESS;
         } catch (Exception exception) {
             log.error(String.valueOf(exception));
@@ -353,21 +342,15 @@ public class DataProviderXML implements IDataProvider {
         return FAIL;
     }
 
-    public  <T> List<T> extract(String key, Class<T> c) {
+    protected ResultSet extract(String sql) {
         try {
-            FileReader reader = new FileReader(getConfigurationEntry(key));
-            Serializer serializer = new Persister();
-            WrapperXML<T> container = serializer.read(WrapperXML.class, reader);
-            reader.close();
-            if (container.getList() == null) {
-                container.setList(new ArrayList<>());
-            } else {
-                return container.getList();
-            }
+            PreparedStatement statement = connection().prepareStatement(sql);
+            connection().close();
+            return statement.executeQuery();
         } catch (Exception exception) {
             log.error(String.valueOf(exception));
         }
-        return new ArrayList<>();
+        return null;
     }
 
     protected HistoryContent createHistoryContent(Object object, Status status) {

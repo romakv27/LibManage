@@ -6,7 +6,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.result.InsertOneResult;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,24 +24,6 @@ public class MongoDB {
     }
     public MongoDB(String url, String database, String collection) {
     }
-
-//    public <T> void saveObject(T object) throws IOException {
-//        if (object == null)
-//            throw new IllegalArgumentException("Constants.ERROR_ARG_EMPTY");
-//        try {
-//            MongoClient mongoDB = MongoClients.create(getConfigurationEntry(Constants.MONGO_URL));
-//            InsertOneResult insertOneResult = mongoDB.getDatabase(getConfigurationEntry(Constants.MONGO_DB))
-//                    .getCollection(getConfigurationEntry(MONGO_COLLECTION))
-//                    .insertOne(Document.parse(objectToJSON(object)));
-//            mongoDB.close();
-//            System.out.println("ok");
-//            if (!insertOneResult.wasAcknowledged())
-//                throw new IllegalArgumentException();
-//        } catch (Exception e) {
-//            log.error(String.valueOf(e));
-//            throw e;
-//        }
-//    }
 
     public <T> void saveObject(T object) throws IOException {
         if (object == null)

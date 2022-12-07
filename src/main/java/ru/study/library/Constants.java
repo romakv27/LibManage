@@ -8,7 +8,13 @@ public class Constants {
     public static final String CONFIG_PATH = System.getProperty("config");
     public static final Properties configuration = new Properties();
 
-    //Mongo
+    //JDBC Connect
+    public static final String DB_DRIVER = "dbDriver";
+    public static final String DB_URL = "dbUrl";
+    public static final String DB_USER = "dbUser";
+    public static final String DB_PASSWORD = "dbPassword";
+
+    //Mongo Connect
     public static final String MONGO_URL = "mongoUrl";
     public static final String MONGO_DB = "mongoDB";
     public static final String MONGO_COLLECTION = "mongoCollection";
@@ -78,5 +84,27 @@ public class Constants {
     public static final String AGE_NOT_EXIST = "You are under the age limit";
 
     public static final String CONNECT_DB = "Connected to DB";
+
+    //SQL
+    public static final String SQL_CREATE_USER = "INSERT INTO USER(id, name, age) VALUES(%d, '%s', %d);";
+    public static final String SQL_GET_USER_BY_ID = "SELECT id, name, age FROM USER WHERE id=%d;";
+    public static final String SQL_UPD_USER = "UPDATE USER SET name='%s', age=%d WHERE id=%d;";
+    public static final String SQL_DEL_USER = "DELETE FROM USER WHERE id=%d;";
+
+    public static final String SQL_CREATE_ART_BOOK = "INSERT INTO ART_BOOK(id, title, author, numberOfPages, ageRestriction, typeOfBook, genre, comics) VALUES(%d, '%s', '%s', %d, %d, '%s', '%s', %d);";
+    public static final String SQL_CREATE_SCIENTIFIC_BOOK = "INSERT INTO SCIENTIFIC_BOOK(id, title, author, numberOfPages, ageRestriction, typeOfBook, direction, forStudy) VALUES(%d, '%s', '%s', %d, %d, '%s', '%s', %d);";
+    public static final String SQL_CREATE_CHILDREN_BOOK = "INSERT INTO CHILDREN_BOOK(id, title, author, numberOfPages, ageRestriction, typeOfBook, genre, comics, educational, interactive) VALUES(%d, '%s', '%s', %d, %d, '%s', '%s', %d, %d, %d);";
+
+    public static final String SQL_GET_ART_BOOK_BY_ID = "SELECT id, title, author, numberOfPages, ageRestriction, typeOfBook, genre, comics FROM ART_BOOK WHERE id=%d;";
+    public static final String SQL_GET_SCIENTIFIC_BOOK_BY_ID = "SELECT id, title, author, numberOfPages, ageRestriction, typeOfBook, direction, forStudy FROM SCIENTIFIC_BOOK WHERE id=%d;";
+    public static final String SQL_GET_CHILDREN_BOOK_BY_ID = "SELECT id, title, author, numberOfPages, ageRestriction, typeOfBook, genre, comics, educational, interactive FROM CHILDREN_BOOK WHERE id=%d;";
+
+    public static final String SQL_DEL_LIBRARY = "DELETE FROM LIBRARY WHERE book=%d AND typeOfBook='%s';";
+    public static final String SQL_DEL_ART_BOOK = "DELETE FROM ART_BOOK WHERE id=%d;";
+    public static final String SQL_DEL_SCIENTIFIC_BOOK = "DELETE FROM SCIENTIFIC_BOOK WHERE id=%d;";
+    public static final String SQL_DEL_CHILDREN_BOOK = "DELETE FROM CHILDREN_BOOK WHERE id=%d;";
+
+    public static final String SQL_ADD_BOOK_TO_LIBRARY = "INSERT INTO LIBRARY(id, book, user, review, rating, typeOfBook) VALUES(%d, %d, %d, '%s', %d, '%s');";
+    public static final String SQL_GET_ALL_LIBRARY = "SELECT id, book, user, review, rating, typeOfBook FROM LIBRARY;";
 
 }
