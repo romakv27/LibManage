@@ -5,6 +5,11 @@ import org.simpleframework.xml.Root;
 
 import java.util.List;
 
+/**
+ * Class container for XML
+ * @author Roman
+ * @param <T>
+ */
 @Root(name = "xml")
 public class WrapperXML<T> {
     @ElementList(inline = true, required = false)

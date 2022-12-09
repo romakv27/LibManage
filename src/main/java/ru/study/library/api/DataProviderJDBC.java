@@ -19,6 +19,11 @@ import static ru.study.library.utils.ConfigurationUtil.getConfigurationEntry;
 public class DataProviderJDBC implements IDataProvider{
     public static final Logger log = LoggerFactory.getLogger(DataProviderJDBC.class);
 
+    /**
+     * This method connecting with DB
+     * @return connection
+     * @throws Exception in case of a connection failure
+     */
     protected Connection connection() throws Exception {
         return DriverManager.getConnection(
                 getConfigurationEntry(DB_URL),

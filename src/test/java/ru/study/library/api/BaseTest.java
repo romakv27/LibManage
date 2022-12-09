@@ -3,7 +3,7 @@ package ru.study.library.api;
 
 import ru.study.library.model.*;
 
-public class BaseBean {
+public class BaseTest {
 
     public User getUser(){
         return new User(1L, "Ivan", 16);
@@ -16,15 +16,18 @@ public class BaseBean {
 
 
     public ArtBook getArtBook(){
-        return new ArtBook(1L, "Doctor Zhivago", "Pasternak", 500, 12, "Novel", false);
+        return new ArtBook(1L, "Doctor Zhivago", "Pasternak",
+                500, 12, "Novel", false);
     }
 
     public Scientific getScientific(){
-        return new Scientific(1L, "System Design Interview", "Alex Xu", 300, 12, "Programming", false);
+        return new Scientific(1L, "System Design Interview", "Alex Xu", 300,
+                12, "Programming", false);
     }
 
     public Children getChildren(){
-        return new Children(1L, "Kolobok", "Ushinski", 50, 2, "The story", true, false, false);
+        return new Children(1L, "Kolobok", "Ushinski", 50, 2,
+                "The story", true, false, false);
     }
 
     public Library getLibrary(){

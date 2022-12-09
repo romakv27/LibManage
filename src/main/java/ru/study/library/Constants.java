@@ -22,15 +22,29 @@ public class Constants {
 
     // Data providers
     public static final String XML = "xml";
+    public static final String CSV = "csv";
+    public static final String JDBC = "jdbc";
 
     // API - base methods names
     public static final String USER = "user";
+    public static final String LIBRARY = "library";
+    public static final String ADD_BOOK = "addBook";
+    public static final String INFORMATION_RECEIPT = "informationReceipt";
+    public static final String DELETE_BOOK="deleteBook";
+    public static final String GET_BOOK="getBook";
 
     // API - extend methods names
     public static final String USER_CREATE = "create";
     public static final String USER_GET = "get";
     public static final String USER_UPD = "upd";
     public static final String USER_DEL = "del";
+
+    public static final String ADD_BOOK_LIBRARY = "addBook";
+    public static final String DEL_BOOK_IN_LIBRARY = "del";
+
+    public static final String ART_BOOK = "art";
+    public static final String SCIENTIFIC_BOOK = "scientific";
+    public static final String CHILDREN_BOOK = "children";
 
     public static final String ALL_USER_REVIEWS = "all_user_reviews";
     public static final String ALL_USER_RATINGS= "all_user_ratings";
